@@ -69,6 +69,19 @@
             border: 1px solid var(--border) !important;
             color: white !important;
         }
+
+        @media (max-width: 768px) {
+            .lg\:grid-cols-8 { 
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important; 
+            }
+            header .max-w-7xl { padding: 0 1rem !important; }
+            h1 { font-size: 14px !important; }
+            #userRoleStatus { 
+                font-size: 8px !important; 
+                letter-spacing: 0.1em !important; 
+            }
+            .text-4xl { font-size: 1.875rem !important; }
+        }
     </style>
 </head>
 <body class="font-sans">
@@ -157,19 +170,19 @@
                     <h3 class="text-2xl font-bold">Registro de Colaboradores</h3>
                 </div>
                 <p class="text-slate-400 text-sm mb-6">Envía tus datos para solicitar acceso y contribuir al repositorio.</p>
-<form id="colaboradorForm" action="https://formsubmit.co/manuelguevarachavarria@outlook.es" method="POST" class="space-y-4">
-    <input type="hidden" name="_next" value="https://caecorg.github.io/OLTSC/">
-    <input type="hidden" name="_captcha" value="false">
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input type="text" name="Nombre" placeholder="Primer Nombre y Primer Apellido" required class="px-4 py-3 rounded-xl outline-none w-full">
-        <input type="email" name="Email" placeholder="Correo Electrónico" required class="px-4 py-3 rounded-xl outline-none w-full">
-    </div>
-    <textarea name="Mensaje" placeholder="¿Por qué te gustaría colaborar?" rows="3" class="w-full px-4 py-3 rounded-xl outline-none"></textarea>
-    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-xl font-bold transition flex items-center justify-center gap-2">
-        <i data-lucide="send" class="w-4 h-4"></i> Enviar Solicitud
-    </button>
-</form>
+                <form id="colaboradorForm" action="https://formsubmit.co/manuelguevarachavarria@outlook.es" method="POST" class="space-y-4">
+                    <input type="hidden" name="_next" value="https://caecorg.github.io/OLTSC/">
+                    <input type="hidden" name="_captcha" value="false">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="text" name="Nombre" placeholder="Primer Nombre y Primer Apellido" required class="px-4 py-3 rounded-xl outline-none w-full">
+                        <input type="email" name="Email" placeholder="Correo Electrónico" required class="px-4 py-3 rounded-xl outline-none w-full">
+                    </div>
+                    <textarea name="Mensaje" placeholder="¿Por qué te gustaría colaborar?" rows="3" class="w-full px-4 py-3 rounded-xl outline-none"></textarea>
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-xl font-bold transition flex items-center justify-center gap-2">
+                        <i data-lucide="send" class="w-4 h-4"></i> Enviar Solicitud
+                    </button>
+                </form>
             </div>
         </section>
     </main>
@@ -190,33 +203,31 @@
             </div>
             <div>
                 <h4 class="font-bold mb-6 text-white uppercase text-xs tracking-widest">Herramientas</h4>
-        <ul class="text-slate-400 space-y-3 text-sm">
-            <li><a href="#" class="hover:text-blue-500 transition">Word Pro Layouts</a></li>
-            <li><a href="#" class="hover:text-green-500 transition">Excel Automations</a></li>
-            <li><a href="#" class="hover:text-red-500 transition">Access Database</a></li>
-            <li><a href="#" class="hover:text-blue-400 transition">Visio Architect</a></li>
-            <li><a href="#" class="hover:text-green-600 transition">Project Master</a></li>
-            <li><a href="#" class="hover:text-blue-800 transition">DEV++ Coding</a></li>
-            <li><a href="#" class="hover:text-yellow-500 transition">PSeInt Logic</a></li>
-        </ul>
+                <ul class="text-slate-400 space-y-3 text-sm">
+                    <li><a href="#" class="hover:text-blue-500 transition">Word Pro Layouts</a></li>
+                    <li><a href="#" class="hover:text-green-500 transition">Excel Automations</a></li>
+                    <li><a href="#" class="hover:text-red-500 transition">Access Database</a></li>
+                    <li><a href="#" class="hover:text-blue-400 transition">Visio Architect</a></li>
+                    <li><a href="#" class="hover:text-green-600 transition">Project Master</a></li>
+                    <li><a href="#" class="hover:text-blue-800 transition">DEV++ Coding</a></li>
+                    <li><a href="#" class="hover:text-yellow-500 transition">PSeInt Logic</a></li>
+                </ul>
             </div>
             <div>
                 <h4 class="font-bold mb-6 text-white uppercase text-xs tracking-widest">Seguridad</h4>
                 <div class="flex flex-col gap-3">
-<div class="flex flex-col gap-3">
-    <div class="flex items-center gap-2 text-slate-400 text-sm">
-        <i data-lucide="shield-check" class="w-4 h-4 text-green-500"></i>
-        Protección LTSC
-    </div>
-    <div class="flex items-center gap-2 text-slate-400 text-sm">
-        <i data-lucide="user-check" class="w-4 h-4 text-blue-500"></i>
-        Control de Usuario
-    </div>
-    <div class="flex items-center gap-2 text-slate-400 text-sm">
-        <i data-lucide="crown" class="w-4 h-4 text-amber-400"></i>
-        Admin: Angel Chavarría
-    </div>
-</div>
+                    <div class="flex items-center gap-2 text-slate-400 text-sm">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-green-500"></i>
+                        Protección LTSC
+                    </div>
+                    <div class="flex items-center gap-2 text-slate-400 text-sm">
+                        <i data-lucide="user-check" class="w-4 h-4 text-blue-500"></i>
+                        Control de Usuario
+                    </div>
+                    <div class="flex items-center gap-2 text-slate-400 text-sm">
+                        <i data-lucide="crown" class="w-4 h-4 text-amber-400"></i>
+                        Admin: Angel Chavarría
+                    </div>
                 </div>
             </div>
         </div>
@@ -224,19 +235,19 @@
             <p class="text-slate-500 text-xs text-center">
                 &copy; 2026 Todos los Derechos Reservados. Administrado por <b>Angel Chavarría</b>.
             </p>
-<div class="flex gap-6">
-    <a href="https://whatsapp.com/channel/0029VbBvbRVGOj9fYAT9EF02" target="_blank" title="Canal de WhatsApp">
-        <i data-lucide="message-circle" class="w-5 h-5 text-slate-500 hover:text-green-500 transition cursor-pointer"></i>
-    </a>
-    
-    <a href="https://www.facebook.com/share/1A98igK6Ze/" target="_blank" title="Facebook">
-        <i data-lucide="facebook" class="w-5 h-5 text-slate-500 hover:text-blue-600 transition cursor-pointer"></i>
-    </a>
-    
-    <a href="https://t.me/OLTSC2024" target="_blank" title="Telegram">
-        <i data-lucide="send" class="w-5 h-5 text-slate-500 hover:text-sky-400 transition cursor-pointer"></i>
-    </a>
-</div>
+            <div class="flex gap-6">
+                <a href="https://whatsapp.com/channel/0029VbBvbRVGOj9fYAT9EF02" target="_blank" title="Canal de WhatsApp">
+                    <i data-lucide="message-circle" class="w-5 h-5 text-slate-500 hover:text-green-500 transition cursor-pointer"></i>
+                </a>
+                
+                <a href="https://www.facebook.com/share/1A98igK6Ze/" target="_blank" title="Facebook">
+                    <i data-lucide="facebook" class="w-5 h-5 text-slate-500 hover:text-blue-600 transition cursor-pointer"></i>
+                </a>
+                
+                <a href="https://t.me/OLTSC2024" target="_blank" title="Telegram">
+                    <i data-lucide="send" class="w-5 h-5 text-slate-500 hover:text-sky-400 transition cursor-pointer"></i>
+                </a>
+            </div>
         </div>
     </footer>
 
@@ -268,7 +279,7 @@
     </div>
 
     <script>
-const MASTER_KEYS = ["admin2024", "", ""];
+        const MASTER_KEYS = ["admin2024", "", ""];
         const COLAB_KEYS = ["colab123", ""];
 
         let currentUserRole = 'invitado';
