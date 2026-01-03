@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Hub | Office LTSC 2024</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-main: #0a0c10;
+            --bg-card: #161b22;
+            --primary: #0078d4;
+            --word: #2b579a;
+            --excel: #217346;
+            --powerpoint: #b7472a;
+            --visio: #3955a3;
+            --project: #31752f;
+            --access: #a4373a;
+            --dev: #004482;
+            --pseint: #f1c40f;
+            --border: #30363d;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: #f0f6fc;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .office-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--border);
+        }
+
+        .office-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px -10px rgba(0, 120, 212, 0.3);
+        }
+
+        .upload-zone {
+            border: 2px dashed var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .admin-only { display: none !important; }
+        .colab-only { display: none !important; }
+        
+        body.is-admin .admin-only { display: flex !important; }
+        body.is-admin .colab-only { display: flex !important; }
+        body.is-colab .colab-only { display: flex !important; }
+
+        #securityOverlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        input, select, textarea {
+            background-color: #0a0c10 !important;
+            border: 1px solid var(--border) !important;
+            color: white !important;
+        }
+    </style>
+</head>
+<body class="font-sans">
+
+    <div id="securityOverlay">
+        <div class="bg-[#161b22] p-10 rounded-3xl border border-red-500/50 text-center">
+            <i data-lucide="lock" class="w-16 h-16 text-red-500 mx-auto mb-4"></i>
+            <h2 class="text-2xl font-bold">Consola Protegida</h2>
+            <p class="text-slate-400 mt-2">Solo el administrador tiene permisos de edición total.</p>
+        </div>
+    </div>
+
+    <header class="fixed w-full top-0 z-50 bg-[#0a0c10]/90 backdrop-blur-md border-b border-[#30363d]">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <i data-lucide="database" class="text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold leading-none">OFFICE LTSC 2024</h1>
+                    <span id="userRoleStatus" class="text-[10px] text-blue-400 font-bold uppercase tracking-[0.2em]">Administrado por Angel Chavarría</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <button id="adminLoginBtn" onclick="toggleLogin()" class="text-slate-400 hover:text-white transition p-2">
+                    <i data-lucide="shield-check" class="w-6 h-6"></i>
+                </button>
+                <button onclick="openUploadModal()" class="colab-only bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-semibold transition flex items-center gap-2">
+                    <i data-lucide="upload" class="w-4 h-4"></i> Subir Nueva
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-32 pb-20 max-w-7xl mx-auto px-6 min-h-screen">
+        <div class="mb-12">
+            <div class="flex items-center gap-2 text-blue-500 mb-2">
+                <i data-lucide="folder-kanban" class="w-5 h-5"></i>
+                <span class="font-bold uppercase tracking-widest text-xs">Administración de Plantillas Digitales</span>
+            </div>
+            <h2 class="text-4xl font-extrabold">Gestor de Plantillas</h2>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 mb-12">
+            <button onclick="filterTemplates('word')" class="p-6 rounded-2xl bg-[#161b22] border border-[#30363d] flex flex-col items-center gap-3 hover:bg-[#2b579a]/10 transition group">
+                <i data-lucide="file-text" class="text-[#2b579a] w-8 h-8 group-hover:scale-110 transition"></i>
+                <span class="text-sm font-bold">Word</span>
+            </button>
+            <button onclick="filterTemplates('excel')" class="p-6 rounded-2xl bg-[#161b22] border border-[#30363d] flex flex-col items-center gap-3 hover:bg-[#217346]/10 transition group">
+                <i data-lucide="sheet" class="text-[#217346] w-8 h-8 group-hover:scale-110 transition"></i>
+                <span class="text-sm font-bold">Excel</span>
+            </button>
+            <button onclick="filterTemplates('powerpoint')" class="p-6 rounded-2xl bg-[#161b22] border border-[#30363d] flex flex-col items-center gap-3 hover:bg-[#b7472a]/10 transition group">
+                <i data-lucide="presentation" class="text-[#b7472a] w-8 h-8 group-hover:scale-110 transition"></i>
+                <span class="text-sm font-bold">PowerPoint</span>
+            </button>
+            <button onclick="filterTemplates('access')" class="p-6 rounded-2xl bg-[#161b22] border border-[#30363d] flex flex-col items-center gap-3 hover:bg-[#a4373a]/10 transition group">
+                <i data-lucide="database" class="text-[#a4373a] w-8 h-8 group-hover:scale-110 transition"></i>
+                <span class="text-sm font-bold">Access</span>
+            </button>
+            <button onclick="filterTemplates('visio')" class="p-6 rounded-2xl bg-[#161b22] border border-[#30363d] flex flex-col items-center gap-3 hover:bg-[#3955a3]/10 transition group">
+                <i data-lucide="network" class="text-[#3955a3] w-8 h-8 group-hover:scale-110 transition"></i>
+                <span class="text-sm font-bold">Visio</span>
+            </button>
+            <button onclick="filterTemplates('project')" class="p-6 rounded-2xl bg-[#161b22] border border-[#30363d] flex flex-col items-center gap-3 hover:bg-[#31752f]/10 transition group">
+                <i data-lucide="calendar-range" class="text-[#31752f] w-8 h-8 group-hover:scale-110 transition"></i>
+                <span class="text-sm font-bold">Project</span>
+            </button>
+            <button onclick="filterTemplates('dev')" class="p-6 rounded-2xl bg-[#161b22] border border-[#30363d] flex flex-col items-center gap-3 hover:bg-[#004482]/10 transition group">
+                <i data-lucide="code-2" class="text-[#004482] w-8 h-8 group-hover:scale-110 transition"></i>
+                <span class="text-sm font-bold">DEV++</span>
+            </button>
+            <button onclick="filterTemplates('pseint')" class="p-6 rounded-2xl bg-[#161b22] border border-[#30363d] flex flex-col items-center gap-3 hover:bg-[#f1c40f]/10 transition group">
+                <i data-lucide="terminal" class="text-[#f1c40f] w-8 h-8 group-hover:scale-110 transition"></i>
+                <span class="text-sm font-bold">PSeInt</span>
+            </button>
+        </div>
+
+        <div id="templatesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-20"></div>
+
+        <section class="mt-20 border-t border-[#30363d] pt-16">
+            <div class="max-w-2xl mx-auto bg-[#161b22] p-8 rounded-3xl border border-[#30363d]">
+                <div class="flex items-center gap-3 mb-6">
+                    <i data-lucide="user-plus" class="text-blue-500 w-6 h-6"></i>
+                    <h3 class="text-2xl font-bold">Registro de Colaboradores</h3>
+                </div>
+                <p class="text-slate-400 text-sm mb-6">Envía tus datos para solicitar acceso y contribuir al repositorio.</p>
+<form id="colaboradorForm" action="https://formsubmit.co/manuelguevarachavarria@outlook.es" method="POST" class="space-y-4">
+    <input type="hidden" name="_next" value="https://tu-sitio-web.com">
+    <input type="hidden" name="_captcha" value="false">
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input type="text" name="Nombre" placeholder="Primer Nombre y Primer Apellido" required class="px-4 py-3 rounded-xl outline-none w-full">
+        <input type="email" name="Email" placeholder="Correo Electrónico" required class="px-4 py-3 rounded-xl outline-none w-full">
+    </div>
+    <textarea name="Mensaje" placeholder="¿Por qué te gustaría colaborar?" rows="3" class="w-full px-4 py-3 rounded-xl outline-none"></textarea>
+    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-xl font-bold transition flex items-center justify-center gap-2">
+        <i data-lucide="send" class="w-4 h-4"></i> Enviar Solicitud
+    </button>
+</form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-[#0d1117] border-t border-[#30363d] pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            <div class="col-span-1 md:col-span-2">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-8 h-8 bg-blue-600 rounded flex items-center justify-center">
+                        <i data-lucide="layout-template" class="text-white w-5 h-5"></i>
+                    </div>
+                    <span class="text-xl font-bold">OLTSC 2024</span>
+                </div>
+                <p class="text-slate-400 max-w-sm leading-relaxed">
+                    Repositorio privado administrado por <b>Angel Chavarría</b>. 
+                    Las personas pueden agregar contenido pero solo el administrador puede gestionarlo.
+                </p>
+            </div>
+            <div>
+                <h4 class="font-bold mb-6 text-white uppercase text-xs tracking-widest">Herramientas</h4>
+        <ul class="text-slate-400 space-y-3 text-sm">
+            <li><a href="#" class="hover:text-blue-500 transition">Word Pro Layouts</a></li>
+            <li><a href="#" class="hover:text-green-500 transition">Excel Automations</a></li>
+            <li><a href="#" class="hover:text-red-500 transition">Access Database</a></li>
+            <li><a href="#" class="hover:text-blue-400 transition">Visio Architect</a></li>
+            <li><a href="#" class="hover:text-green-600 transition">Project Master</a></li>
+            <li><a href="#" class="hover:text-blue-800 transition">DEV++ Coding</a></li>
+            <li><a href="#" class="hover:text-yellow-500 transition">PSeInt Logic</a></li>
+        </ul>
+            </div>
+            <div>
+                <h4 class="font-bold mb-6 text-white uppercase text-xs tracking-widest">Seguridad</h4>
+                <div class="flex flex-col gap-3">
+<div class="flex flex-col gap-3">
+    <div class="flex items-center gap-2 text-slate-400 text-sm">
+        <i data-lucide="shield-check" class="w-4 h-4 text-green-500"></i>
+        Protección LTSC
+    </div>
+    <div class="flex items-center gap-2 text-slate-400 text-sm">
+        <i data-lucide="user-check" class="w-4 h-4 text-blue-500"></i>
+        Control de Usuario
+    </div>
+    <div class="flex items-center gap-2 text-slate-400 text-sm">
+        <i data-lucide="crown" class="w-4 h-4 text-amber-400"></i>
+        Admin: Angel Chavarría
+    </div>
+</div>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-6 pt-8 border-t border-[#30363d] flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-slate-500 text-xs text-center">
+                &copy; 2026 Todos los Derechos Reservados. Administrado por <b>Angel Chavarría</b>.
+            </p>
+<div class="flex gap-6">
+    <a href="https://whatsapp.com/channel/0029VbBvbRVGOj9fYAT9EF02" target="_blank" title="Canal de WhatsApp">
+        <i data-lucide="message-circle" class="w-5 h-5 text-slate-500 hover:text-green-500 transition cursor-pointer"></i>
+    </a>
+    
+    <a href="https://www.facebook.com/share/1A98igK6Ze/" target="_blank" title="Facebook">
+        <i data-lucide="facebook" class="w-5 h-5 text-slate-500 hover:text-blue-600 transition cursor-pointer"></i>
+    </a>
+    
+    <a href="https://t.me/OLTSC2024" target="_blank" title="Telegram">
+        <i data-lucide="send" class="w-5 h-5 text-slate-500 hover:text-sky-400 transition cursor-pointer"></i>
+    </a>
+</div>
+        </div>
+    </footer>
+
+    <div id="uploadModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeModal('uploadModal')"></div>
+        <div class="bg-[#161b22] border border-[#30363d] w-full max-w-md rounded-3xl p-8 relative shadow-2xl text-white">
+            <h2 class="text-2xl font-bold mb-6">Agregar al Repositorio</h2>
+            <form id="uploadForm" class="space-y-4">
+                <select id="softwareType" required class="w-full px-4 py-3 rounded-xl outline-none">
+                    <option value="word">Word (.dotx)</option>
+                    <option value="excel">Excel (.xltx)</option>
+                    <option value="powerpoint">PowerPoint (.potx)</option>
+                    <option value="access">Access (.accdb)</option>
+                    <option value="visio">Visio (.vstx)</option>
+                    <option value="project">Project (.mpt)</option>
+                    <option value="dev">DEV++ (.cpp)</option>
+                    <option value="pseint">PSeInt (.psc)</option>
+                </select>
+                <input type="text" id="templateName" required placeholder="Nombre de la plantilla" class="w-full px-4 py-3 rounded-xl outline-none">
+                <input type="file" id="realFileInput" class="hidden" onchange="updateFileStatus()">
+                <div class="upload-zone rounded-xl p-8 text-center border-dashed border-2 cursor-pointer" onclick="document.getElementById('realFileInput').click()">
+                    <i data-lucide="file-up" class="w-8 h-8 mx-auto text-slate-500 mb-2"></i>
+                    <span id="fileStatusText" class="text-xs text-slate-400">Seleccionar archivo</span>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 py-4 rounded-xl font-bold transition">Añadir Ahora</button>
+            </form>
+            <button onclick="closeModal('uploadModal')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i data-lucide="x"></i></button>
+        </div>
+    </div>
+
+    <script>
+const MASTER_KEYS = ["admin2024", "", ""];
+        const COLAB_KEYS = ["colab123", ""];
+
+        let currentUserRole = 'invitado';
+
+        let templates = [
+            { id: 1, type: 'visio', name: 'Arquitectura Red Local', date: '2026-01-02', fileData: null },
+            { id: 2, type: 'project', name: 'Plan Maestro LTSC', date: '2026-01-01', fileData: null },
+            { id: 3, type: 'excel', name: 'Control de Costos 2.0', date: '2025-12-15', fileData: null }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            renderTemplates();
+            initSecurity();
+        });
+
+        function toggleLogin() {
+            if (currentUserRole !== 'invitado') {
+                currentUserRole = 'invitado';
+                document.body.classList.remove('is-admin', 'is-colab');
+                document.getElementById('adminLoginBtn').classList.remove('text-green-500', 'text-blue-400');
+                document.getElementById('adminLoginBtn').classList.add('text-slate-400');
+                document.getElementById('userRoleStatus').innerText = "MODO INVITADO";
+                renderTemplates();
+                alert("🔒 Sesión cerrada.");
+                return;
+            }
+
+            const pass = prompt("Introduce tu PIN de acceso:");
+            if (!pass) return;
+
+            if (MASTER_KEYS.includes(pass)) {
+                currentUserRole = 'admin';
+                document.body.classList.add('is-admin');
+                document.getElementById('adminLoginBtn').classList.replace('text-slate-400', 'text-green-500');
+                document.getElementById('userRoleStatus').innerText = "ADMINISTRADOR ACTIVADO";
+                alert("✅ Acceso total concedido.");
+            } else if (COLAB_KEYS.includes(pass)) {
+                currentUserRole = 'colab';
+                document.body.classList.add('is-colab');
+                document.getElementById('adminLoginBtn').classList.replace('text-slate-400', 'text-blue-400');
+                document.getElementById('userRoleStatus').innerText = "MODO COLABORADOR";
+                alert("📂 Modo colaborador: Puedes subir y descargar.");
+            } else {
+                alert("❌ PIN Incorrecto.");
+            }
+            renderTemplates();
+        }
+
+        function renderTemplates(filter = 'all') {
+            const grid = document.getElementById('templatesGrid');
+            grid.innerHTML = '';
+            const filtered = filter === 'all' ? templates : templates.filter(t => t.type === filter);
+
+            filtered.forEach(t => {
+                const icon = { 
+                    word:'file-text', excel:'sheet', powerpoint:'presentation', 
+                    access:'database', visio:'network', project:'calendar-range',
+                    dev: 'code-2', pseint: 'terminal'
+                }[t.type];
+                
+                const color = { 
+                    word:'text-blue-500', excel:'text-green-600', powerpoint:'text-orange-500', 
+                    access: 'text-red-600', visio:'text-indigo-500', project:'text-green-700',
+                    dev: 'text-blue-800', pseint: 'text-yellow-500'
+                }[t.type];
+
+                grid.innerHTML += `
+                    <div class="office-card bg-[#161b22] p-6 rounded-2xl relative text-left">
+                        <div class="flex justify-between items-start mb-4">
+                            <i data-lucide="${icon}" class="${color} w-8 h-8"></i>
+                            <button onclick="deleteTemplate(${t.id})" class="admin-only p-1 text-red-500 hover:bg-red-500/10 rounded">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <h3 class="font-bold truncate mb-1">${t.name}</h3>
+                        <p class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">${t.type} Template</p>
+                        <div class="mt-6 flex justify-between items-center border-t border-[#30363d] pt-4">
+                            <span class="text-[10px] text-slate-600">${t.date}</span>
+                            <button onclick="downloadFile(${t.id})" class="text-blue-500 hover:text-blue-400 font-bold text-xs flex items-center gap-1">
+                                <i data-lucide="download" class="w-3 h-3"></i> Bajar
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            lucide.createIcons();
+        }
+
+        document.getElementById('colaboradorForm').addEventListener('submit', (e) => {
+            alert("✅ Procesando solicitud... Serás redirigido para confirmar el envío.");
+        });
+
+        function updateFileStatus() {
+            const file = document.getElementById('realFileInput').files[0];
+            if (file) {
+                document.getElementById('fileStatusText').innerText = "✅ Archivo listo: " + file.name;
+                document.getElementById('fileStatusText').classList.add('text-green-400');
+            }
+        }
+
+        function downloadFile(id) {
+            const item = templates.find(t => t.id === id);
+            if (item && item.fileData) {
+                const link = document.createElement('a');
+                link.href = item.fileData; link.download = item.name;
+                document.body.appendChild(link); link.click(); document.body.removeChild(link);
+            } else alert("ℹ️ Plantilla demostrativa.");
+        }
+
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const fileInput = document.getElementById('realFileInput');
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                templates.unshift({
+                    id: Date.now(),
+                    type: document.getElementById('softwareType').value,
+                    name: document.getElementById('templateName').value,
+                    date: new Date().toISOString().split('T')[0],
+                    fileData: event.target.result
+                });
+                renderTemplates();
+                closeModal('uploadModal');
+                this.reset();
+                alert("🚀 Agregado con éxito.");
+            }.bind(this);
+            reader.readAsDataURL(file);
+        });
+
+        function deleteTemplate(id) {
+            if (currentUserRole !== 'admin') return;
+            if (confirm("¿Eliminar definitivamente?")) {
+                templates = templates.filter(t => t.id !== id);
+                renderTemplates();
+            }
+        }
+
+        function filterTemplates(type) { renderTemplates(type); }
+        function openUploadModal() { document.getElementById('uploadModal').classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+        function initSecurity() {
+            const overlay = document.getElementById('securityOverlay');
+            const trigger = (e) => { 
+                if (currentUserRole !== 'invitado') return;
+                e.preventDefault(); 
+                overlay.style.display = 'flex'; 
+                setTimeout(() => overlay.style.display = 'none', 3000); 
+            };
+            document.addEventListener('contextmenu', trigger);
+            document.addEventListener('keydown', (e) => {
+                if (currentUserRole === 'invitado' && (e.ctrlKey && ['u','s','i','j'].includes(e.key.toLowerCase()) || e.key === 'F12')) trigger(e);
+            });
+        }
+    </script>
+</body>
+</html>
